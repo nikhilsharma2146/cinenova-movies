@@ -428,18 +428,23 @@ def local_css():
 # Data Loading
 @st.cache_resource
 def load_cinenova_engine():
-    if not os.path.exists('dataset/processed_movies.csv'):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    processed_path = os.path.join(base_dir, 'dataset', 'processed_movies.csv')
+    
+    if not os.path.exists(processed_path):
         df = preprocess_data()
-        df.to_csv('dataset/processed_movies.csv', index=False)
+        df.to_csv(processed_path, index=False)
     else:
-        df = pd.read_csv('dataset/processed_movies.csv')
+        df = pd.read_csv(processed_path)
     return MovieRecommender(df)
 
 @st.cache_data(show_spinner=False)
 def get_base64_logo():
     try:
-        if os.path.exists("assets/logo.png"):
-            with open("assets/logo.png", "rb") as f:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        logo_path = os.path.join(base_dir, 'assets', 'logo.png')
+        if os.path.exists(logo_path):
+            with open(logo_path, "rb") as f:
                 return base64.b64encode(f.read()).decode()
     except:
         pass
@@ -557,27 +562,27 @@ def render_navbar():
     st.markdown(f"""
     <div class="cinenova-nav">
         <div style="display: flex; align-items: center;">
-            <a href="/?nav=Home" target="_self" style="text-decoration: none;">
+            <a href="?nav=Home" target="_self" style="text-decoration: none;">
                 <div class="cinenova-logo-stack">
                     {logo_html}
                     <div class="cinenova-logo-text">CINENOVA</div>
                 </div>
             </a>
             <div class="cinenova-links">
-                <a href="/?nav=Home" target="_self">Home</a>
-                <a href="/?nav=Binge" target="_self">Shows</a>
-                <a href="/?nav=TopRated" target="_self">Movies</a>
-                <a href="/?nav=Collection" target="_self">My List</a>
+                <a href="?nav=Home" target="_self">Home</a>
+                <a href="?nav=Binge" target="_self">Shows</a>
+                <a href="?nav=TopRated" target="_self">Movies</a>
+                <a href="?nav=Collection" target="_self">My List</a>
             </div>
         </div>
         <div class="cinenova-icons">
-            <a href="/?nav=Notifications" class="icon-btn" title="Notifications">
+            <a href="?nav=Notifications" class="icon-btn" title="Notifications">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                     <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                 </svg>
             </a>
-            <a href="/?nav=Profile" class="avatar-circle" title="Profile">C</a>
+            <a href="?nav=Profile" class="avatar-circle" title="Profile">C</a>
         </div>
     </div>
     """, unsafe_allow_html=True)

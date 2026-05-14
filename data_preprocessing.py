@@ -11,7 +11,11 @@ def clean_title(title):
     title = re.sub(r'[^\x00-\x7F]+', '', title)
     return title.strip()
 
-def preprocess_data(file_path='dataset/movie_metadata.csv'):
+def preprocess_data(file_path=None):
+    if file_path is None:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'dataset', 'movie_metadata.csv')
+        
     print("Loading dataset...")
     df = pd.read_csv(file_path)
     
